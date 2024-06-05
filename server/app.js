@@ -27,12 +27,14 @@ app.post('/contracts/', (req, res) => {
 });
 
 app.put('/contracts/approve/:address', (req, res) => {
-  const contracts = require('./contracts.json');
+  let contracts = require('./contracts.json');
 
   contracts = contracts.map(c => {
-    if (c.address === req.param.address) {
+    if (c.address === req.params.address) {
       c.status = 'Approved'
     }
+
+    return c;
   });
 
   fs.writeFile('./contracts.json', JSON.stringify(contracts), () => {
@@ -41,12 +43,14 @@ app.put('/contracts/approve/:address', (req, res) => {
 });
 
 app.put('/contracts/decline/:address', (req, res) => {
-  const contracts = require('./contracts.json');
+  let contracts = require('./contracts.json');
 
   contracts = contracts.map(c => {
-    if (c.address === req.param.address) {
+    if (c.address === req.params.address) {
       c.status = 'Declined'
     }
+
+    return c;
   });
 
   fs.writeFile('./contracts.json', JSON.stringify(contracts), () => {

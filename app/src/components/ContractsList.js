@@ -27,7 +27,7 @@ function ContractsList({ provider, contractsApiUrl, approveContract, declineCont
   const approve = async escrow => {
     const contract = await getContract(escrow.address, signer);
 
-    contract.on('Approved', () => approveMutation.mutate(escrow.address));
+    contract.on('Approved', () => approveMutation.mutate(escrow));
 
     approveContract(contract);
   }
@@ -35,7 +35,7 @@ function ContractsList({ provider, contractsApiUrl, approveContract, declineCont
   const decline = async escrow => {
     const contract = await getContract(escrow.address, signer);
 
-    contract.on('Declined', () => declineMutation.mutate(escrow.address));
+    contract.on('Declined', () => declineMutation.mutate(escrow));
 
     declineContract(contract);
   }
