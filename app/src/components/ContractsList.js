@@ -24,13 +24,6 @@ function ContractsList({ provider, contractsApiUrl, approveContract, declineCont
     mutationFn: escrow => axios.put(contractsApiUrl + '/decline/' + escrow.address)
   });
 
-  const formatAddress = (address, size = 5) => {
-    const start = address.substring(0, size);
-    const end = address.substring(address.length - size, address.length);
-
-    return start + '...' + end;
-  }
-
   const approve = async escrow => {
     const contract = await getContract(escrow.address, signer);
 
@@ -45,6 +38,13 @@ function ContractsList({ provider, contractsApiUrl, approveContract, declineCont
     contract.on('Declined', () => declineMutation.mutate(escrow.address));
 
     declineContract(contract);
+  }
+
+  const formatAddress = (address, size = 5) => {
+    const start = address.substring(0, size);
+    const end = address.substring(address.length - size, address.length);
+
+    return start + '...' + end;
   }
 
   return (
