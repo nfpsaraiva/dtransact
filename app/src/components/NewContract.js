@@ -6,9 +6,7 @@ import { useEffect, useState } from "react";
 import { approveContract, declineContract, deployContract } from "../utils/ContractUtils";
 import axios from "axios";
 
-function NewContract({contractsApiUrl}) {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-
+function NewContract({provider, contractsApiUrl}) {
   const [account, setAccount] = useState();
   const [signer, setSigner] = useState();
   const [signerAddress, setSignerAddress] = useState();
@@ -45,20 +43,6 @@ function NewContract({contractsApiUrl}) {
       arbiter,
       beneficiary,
       value: wei,
-      handleApprove: async () => {
-        escrowContract.on('Approved', () => {
-          console.log('approved');
-        });
-
-        await approveContract(escrowContract, signer);
-      },
-      handleDecline: async () => {
-        escrowContract.on('Declined', () => {
-          console.log('declined');
-        });
-
-        await declineContract(escrowContract, signer);
-      }
     };
 
     await axios.post(contractsApiUrl, {

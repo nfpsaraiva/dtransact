@@ -11,18 +11,23 @@ async function deployContract(signer, arbiter, beneficiary, value) {
     return factory.deploy(arbiter, beneficiary, { value });
 }
 
-async function approveContract(escrowContract, signer) {
-    const approveTxn = await escrowContract.connect(signer).approve();
+async function getContract(address, signer) {
+    return new ethers.Contract(address, Escrow.abi, signer);
+}
+
+async function approveContract(contract) {
+    const approveTxn = await contract.approve();
     await approveTxn.wait();
 }
 
-async function declineContract(escrowContract, signer) {
-    const approveTxn = await escrowContract.connect(signer).decline();
+async function declineContract(contract) {
+    const approveTxn = await contract.decline();
     await approveTxn.wait();
 }
 
 export {
     deployContract,
+    getContract,
     approveContract,
     declineContract
 }
