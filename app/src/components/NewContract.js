@@ -3,7 +3,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import { approveContract, declineContract, deployContract } from "../utils/ContractUtils";
+import { deployContract } from "../utils/ContractUtils";
 import axios from "axios";
 
 function NewContract({provider, contractsApiUrl}) {
@@ -28,7 +28,7 @@ function NewContract({provider, contractsApiUrl}) {
     }
 
     getAccounts();
-  }, [account]);
+  }, [account, provider]);
 
   const createContract = async () => {
     const wei = Number(ethers.utils.parseEther(value.toString())).toString();

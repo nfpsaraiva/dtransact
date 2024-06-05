@@ -21,7 +21,7 @@ if (!window.ethereum) {
 } else {
   root.render(
     <React.StrictMode>
-      <MantineProvider theme={theme}>
+      <MantineProvider theme={theme} defaultColorScheme='dark'>
         <QueryClientProvider client={queryClient}>
           <App />
         </QueryClientProvider>
