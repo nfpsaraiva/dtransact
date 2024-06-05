@@ -4,10 +4,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import '@mantine/core/styles.css';
 import { MantineProvider, createTheme } from '@mantine/core';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const theme = createTheme({});
+const queryClient = new QueryClient()
+
 
 if (!window.ethereum) {
   root.render(
@@ -19,7 +22,9 @@ if (!window.ethereum) {
   root.render(
     <React.StrictMode>
       <MantineProvider theme={theme}>
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
       </MantineProvider>
     </React.StrictMode>
   );
