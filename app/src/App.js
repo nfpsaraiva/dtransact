@@ -1,9 +1,13 @@
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import deploy from './deploy';
-import Escrow from './Escrow';
+import { Button, Center, Divider, Group, Modal, Stack, Text, TextInput, Title } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import axios from 'axios';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+const CONTRACTS_API_URL = 'http://localhost:3001/contracts';
 
 export async function approve(escrowContract, signer) {
   const approveTxn = await escrowContract.connect(signer).approve();
@@ -15,9 +19,26 @@ function App() {
   const [account, setAccount] = useState();
   const [signer, setSigner] = useState();
 
+  const [arbiter, setArbiter] = useState('0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC');
+  const [beneficiary, setBeneficiary] = useState('0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
+  const [value, setValue] = useState(0.001);
+  const [newContractOpened, newContractHandle] = useDisclosure(false);
+
+
+  const getAllContracts = async () => axios.get(CONTRACTS_API_URL);
+
+
+  useEffect(() => {
+    getAllContracts().then(res => {
+      setEscrows(res.data)
+    });
+
+  }, []);
+
   useEffect(() => {
     async function getAccounts() {
       const accounts = await provider.send('eth_requestAccounts', []);
+
 
       setAccount(accounts[0]);
       setSigner(provider.getSigner());
@@ -27,73 +48,87 @@ function App() {
   }, [account]);
 
   async function newContract() {
-    const beneficiary = document.getElementById('beneficiary').value;
-    const arbiter = document.getElementById('arbiter').value;
-    const value = ethers.BigNumber.from(document.getElementById('wei').value);
-    const escrowContract = await deploy(signer, arbiter, beneficiary, value);
+    const wei = Number(ethers.utils.parseEther(value.toString())).toString();
 
+    const escrowContract = await deploy(signer, arbiter, beneficiary, wei);
+
+    const signerAddress = await signer.getAddress();
 
     const escrow = {
       address: escrowContract.address,
+      signer: signerAddress,
       arbiter,
       beneficiary,
-      value: value.toString(),
+      value: wei,
       handleApprove: async () => {
         escrowContract.on('Approved', () => {
-          document.getElementById(escrowContract.address).className =
-            'complete';
-          document.getElementById(escrowContract.address).innerText =
-            "✓ It's been approved!";
+          console.log('approved');
         });
 
         await approve(escrowContract, signer);
       },
     };
 
+    const contracts = await axios.post(CONTRACTS_API_URL, {
+      contract: escrow
+    });
+
+    console.log(contracts);
+
+
     setEscrows([...escrows, escrow]);
+    newContractHandle.close();
   }
 
   return (
     <>
-      <div className="contract">
-        <h1> New Contract </h1>
-        <label>
-          Arbiter Address
-          <input type="text" id="arbiter" />
-        </label>
-
-        <label>
-          Beneficiary Address
-          <input type="text" id="beneficiary" />
-        </label>
-
-        <label>
-          Deposit Amount (in Wei)
-          <input type="text" id="wei" />
-        </label>
-
-        <div
-          className="button"
-          id="deploy"
-          onClick={(e) => {
-            e.preventDefault();
-
-            newContract();
-          }}
-        >
-          Deploy
-        </div>
-      </div>
-
-      <div className="existing-contracts">
-        <h1> Existing Contracts </h1>
-
-        <div id="container">
-          {escrows.map((escrow) => {
-            return <Escrow key={escrow.address} {...escrow} />;
-          })}
-        </div>
-      </div>
+      <Modal title='New Contract' opened={newContractOpened} onClose={newContractHandle.close}>
+        <Stack>
+          <TextInput label='Arbiter' value={arbiter} onChange={e => setArbiter(e.target.value)} />
+          <TextInput label='Beneficiary' value={beneficiary} onChange={e => setBeneficiary(e.target.value)} />
+          <TextInput label='ETH' value={value} onChange={e => setValue(e.target.value)} />
+          <Button onClick={newContract}>Submit</Button>
+        </Stack>
+      </Modal>
+      <Center>
+        <Stack gap={'xl'}>
+          <Group justify='space-between'>
+            <Stack gap={4}>
+              <Title>dTransact</Title>
+              <Text c={'dimmed'}>Transact value</Text>
+            </Stack>
+          </Group>
+          <Stack gap={'xs'}>
+            <Group justify='space-between'>
+              <Title order={3}>Your Contracts</Title>
+              <Button onClick={newContractHandle.open}>New Contract</Button>
+            </Group>
+            <Divider />
+          </Stack>
+          {
+            escrows.map((escrow) => {
+              return (
+                <Group>
+                  <Stack gap={3}>
+                    <Text>Arbiter</Text>
+                    <Text>{escrow.arbiter}</Text>
+                  </Stack>
+                  <Stack gap={3}>
+                    <Text>Beneficiary</Text>
+                    <Text>{escrow.beneficiary}</Text>
+                  </Stack>
+                  <Stack gap={3}>
+                    <Text>ETH</Text>
+                    <Text>{escrow.value}</Text>
+                  </Stack>
+                  <Button>Approve</Button>
+                </Group>
+              )
+              //return <Escrow key={escrow.address} {...escrow} />;
+            })
+          }
+        </Stack>
+      </Center>
     </>
   );
 }
