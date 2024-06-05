@@ -2,9 +2,9 @@ import { Button, Card, Group, Stack, Text } from "@mantine/core";
 import axios from "axios";
 import { ethers } from "ethers";
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getContract } from "../utils/ContractUtils";
+import { approveContract, declineContract, getContract } from "../utils/ContractUtils";
 
-function ContractsList({ provider, contractsApiUrl, approveContract, declineContract }) {
+function ContractsList({ provider, contractsApiUrl }) {
   const signer = provider.getSigner();
 
   const { data: escrows, isLoading } = useQuery({
@@ -91,7 +91,11 @@ function ContractsList({ provider, contractsApiUrl, approveContract, declineCont
                         <Button onClick={() => approve(escrow)}>Approve</Button>
                         <Button onClick={() => decline(escrow)} color="red">Decline</Button>
                       </Group>
-                      : <Text fw={600} c={'teal'}>Approved</Text>
+                      : (
+                        escrow.status === 'Approved'
+                          ? <Text fw={600} c={'teal'}>Approved</Text>
+                          : <Text fw={600} c={'red'}>Declined</Text>
+                      )
                   }
                 </Stack>
               </Group>

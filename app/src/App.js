@@ -2,7 +2,6 @@ import { Center, Divider, Group, Stack, Title } from '@mantine/core';
 import ContractsList from './components/ContractsList';
 import NewContract from './components/NewContract';
 import Header from './components/Header';
-import { approveContract, declineContract } from './utils/ContractUtils';
 import { ethers } from 'ethers';
 
 const CONTRACTS_API_URL = 'http://localhost:3001/contracts';
@@ -24,8 +23,6 @@ function App() {
         <ContractsList
           provider={provider}
           contractsApiUrl={CONTRACTS_API_URL}
-          approveContract={approveContract}
-          declineContract={declineContract}
         />
       </Stack>
     </Center>
