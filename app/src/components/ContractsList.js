@@ -55,12 +55,14 @@ function ContractsList({ provider, contractsApiUrl }) {
       {
         escrows &&
         escrows.map(escrow => {
+          const date = new Date(escrow.date);
+
           return (
             <Card key={escrow.address} withBorder={1} shadow="md">
               <Group gap={"xl"}>
                 <Stack gap={3}>
                   <Text fw={600}>Date</Text>
-                  <Text>{escrow.date}</Text>
+                  <Text>{date.toLocaleDateString() + " " + date.toLocaleTimeString()}</Text>
                 </Stack>
                 <Stack gap={3}>
                   <Text fw={600}>Address</Text>
@@ -82,7 +84,7 @@ function ContractsList({ provider, contractsApiUrl }) {
                   <Text fw={600}>ETH</Text>
                   <Text>{Number(ethers.utils.formatEther(escrow.value))}</Text>
                 </Stack>
-                <Stack gap={3} align="center">
+                <Stack gap={3}>
                   <Text fw={600}>Status</Text>
                   {
                     escrow.status === 'Pending'

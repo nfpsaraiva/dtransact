@@ -11,7 +11,7 @@ function App() {
 
   return (
     <Center>
-      <Stack gap={'xl'}>
+      <Stack m={"xl"} gap={'xl'}>
         <Header />
         <Stack gap={'xs'}>
           <Group justify='space-between'>
