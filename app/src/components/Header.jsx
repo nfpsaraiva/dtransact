@@ -8,7 +8,7 @@ function Header() {
         <Title>dTransact</Title>
         <Text c={'dimmed'}>Transact value</Text>
       </Stack>
-      <ColorThemeSwitcher />
+      {/* <ColorThemeSwitcher /> */}
     </Group>
   )
 }

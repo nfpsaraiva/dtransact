@@ -1,14 +1,14 @@
 import { ethers } from 'ethers';
 import Escrow from './../artifacts/contracts/Escrow.sol/Escrow';
 
-async function deployContract(signer, arbiter, beneficiary, value) {
+async function deployContract(name, description, signer, arbiter, beneficiary, value) {
     const factory = new ethers.ContractFactory(
         Escrow.abi,
         Escrow.bytecode,
         signer
     );
 
-    return factory.deploy(arbiter, beneficiary, { value });
+    return factory.deploy(name, description , arbiter, beneficiary, { value });
 }
 
 async function getContract(address, signer) {

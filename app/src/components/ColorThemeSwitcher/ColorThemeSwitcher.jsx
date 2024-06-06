@@ -14,8 +14,12 @@ function ColorThemeSwitcher() {
       size="lg"
       aria-label="Toggle color scheme"
     >
-      <IconSun className={cx(classes.icon, classes.light)} stroke={1.5} />
-      <IconMoon className={cx(classes.icon, classes.dark)} stroke={1.5} />
+      {
+        computedColorScheme === 'light' && <IconSun className={cx(classes.icon, classes.light)} stroke={1.5} />
+      }
+      {
+        computedColorScheme === 'dark' && <IconMoon className={cx(classes.icon, classes.dark)} stroke={1.5} />
+      }
     </ActionIcon>
   );
 }
