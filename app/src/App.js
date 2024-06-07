@@ -4,10 +4,13 @@ import NewContract from './components/NewContract';
 import Header from './components/Header';
 import { ethers } from 'ethers';
 
-const CONTRACTS_API_URL = 'http://localhost:3001/contracts';
+const CONTRACTS_API_URL = process.env.REACT_APP_API_URL;
+
 
 function App() {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+  console.log(CONTRACTS_API_URL);
 
   return (
     <Center>
