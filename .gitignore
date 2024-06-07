@@ -2,3 +2,4 @@ app/dist
 cache
 node_modules
 *.bck
+.env
