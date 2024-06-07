@@ -1,4 +1,4 @@
-import { Accordion, ActionIcon, Badge, Button, Card, Group, Menu, Stack, Text } from "@mantine/core";
+import { Accordion, ActionIcon, Button, Card, Group, Menu, Stack, Text } from "@mantine/core";
 import axios from "axios";
 import { ethers } from "ethers";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

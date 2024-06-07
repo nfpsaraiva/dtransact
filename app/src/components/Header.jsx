@@ -1,5 +1,4 @@
 import { Group, Stack, Text, Title } from "@mantine/core";
-import ColorThemeSwitcher from "./ColorThemeSwitcher/ColorThemeSwitcher";
 
 function Header() {
   return (
