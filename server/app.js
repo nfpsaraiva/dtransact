@@ -7,6 +7,10 @@ const fs = require('fs');
 app.use(cors());
 app.use(express.json())
 
+app.get('/ping', (req, res) => {
+  res.send("OK");
+});
+
 app.get('/contracts/arbiter/:address', (req, res) => {
   let contracts = require('./contracts.json');
 

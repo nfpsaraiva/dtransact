@@ -75,7 +75,7 @@ function ContractsList({ provider, contractsApiUrl }) {
       }
       {
         escrows &&
-        <Accordion variant="separated" disableChevronRotation chevron={<></>}>
+        <Accordion variant="contained" disableChevronRotation chevron={<></>}>
           {
             escrows.map(escrow => {
               const date = new Date(escrow.date);
